@@ -47,9 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const headerInner = document.querySelector(".site-header-inner");
     const navbar = document.querySelector(".navbar");
 
+    let hamburger;
+
     if (header && headerInner && navbar) {
 
-        const hamburger = document.createElement("div");
+        hamburger = document.createElement("div");
         hamburger.classList.add("hamburger");
 
         hamburger.innerHTML = `<span></span><span></span><span></span>`;
@@ -127,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* =========================
-       AUTO OVERFLOW → HAMBURGER SWITCH
+       AUTO OVERFLOW → HAMBURGER SWITCH (FIXED)
     ========================= */
 
     function checkNavbarOverflow() {
@@ -136,16 +138,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!header || !menu) return;
 
-        const availableWidth = header.offsetWidth - 220; // logo buffer
+        // 🔥 FIX: reliable width calculation (mobile-safe)
+        const headerWidth = header.getBoundingClientRect().width;
         const menuWidth = menu.scrollWidth;
+
+        const availableWidth = headerWidth - 220; // logo buffer
 
         if (menuWidth > availableWidth) {
             header.classList.add("overflow-mode");
+
+            // safety: ensure hamburger exists
+            if (!document.querySelector(".hamburger") && headerInner && navbar) {
+                headerInner.appendChild(hamburger);
+            }
+
         } else {
             header.classList.remove("overflow-mode");
         }
     }
 
-    window.addEventListener("load", checkNavbarOverflow);
-    window.addEventListener("resize", checkNavbarOverflow);
+    // 🔥 FIX: timing issue (THIS is what broke iPhone DevTools)
+    window.addEventListener("load", () => {
+        setTimeout(checkNavbarOverflow, 50);
+    });
+
+    window.addEventListener("resize", () => {
+        setTimeout(checkNavbarOverflow, 50);
+    });
+
+    requestAnimationFrame(() => {
+        checkNavbarOverflow();
+    });
+
 });
