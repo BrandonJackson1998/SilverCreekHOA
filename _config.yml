@@ -1,0 +1,8 @@
+title: Silver Creek HOA
+description: The Silver Creek Community Website
+baseurl: "/SilverCreekHOA"
+url: "https://brandonjackson1998.github.io"
+# Explicitly tell Jekyll that this folder has static images
+static_files:
+  - HOA-Documents
+  

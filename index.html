@@ -1,0 +1,81 @@
+---
+layout: default
+title: Home
+---
+
+<section class="main-highlight">
+    <h2>Silver  Creek  Townhomes</h2>
+
+    <div class="image-wrapper">
+        {% for file in site.static_files %}
+            {% if file.name == "Clubhouse.webp" %}
+                <img src="{{ file.path | relative_url }}" alt="Community Clubhouse" class="center-image-main">
+            {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<!-- =========================
+     INFO SECTION (NEW)
+========================= -->
+
+<section class="home-info">
+
+    <h3>Info</h3>
+
+    <ul class="info-list">
+
+        <li>
+            <a href="https://app.payhoa.com/auth/login?uri=%252Fapp%252Forganization%252Fdashboard" target="_blank">
+                Homeowner Portal
+            </a>
+        </li>
+
+        <li>
+            <a href="mailto:SilvercreekBoardMembers@gmail.com">
+                SilvercreekBoardMembers@gmail.com
+            </a>
+        </li>
+
+        <li>
+            <a href="tel:4354141817">
+                (435) 414-1817
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.google.com/maps/place/37%C2%B007'04.3%22N+113%C2%B037'13.8%22W/@37.1178772,-113.6230923,1131m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d37.117873!4d-113.620512?entry=tts&g_ep=EgoyMDI0MTIxMS4wIPu8ASoASAFQAw%3D%3D" target="_blank">
+                1732 W 540 N, St. George, UT 84770
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.google.com/maps/place/37%C2%B007'04.3%22N+113%C2%B037'13.8%22W/@37.1178772,-113.6230923,1131m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d37.117873!4d-113.620512?entry=tts&g_ep=EgoyMDI0MTIxMS4wIPu8ASoASAFQAw%3D%3D" target="_blank">
+                37.117873, -113.620512
+            </a>
+        </li>
+
+    </ul>
+
+</section>
+
+<section class="image-gallery">
+    <h3>Community</h3>
+
+    <div class="gallery-grid">
+        {% for file in site.static_files %}
+            {% if file.path contains "HOA-Documents/Website-Image-Carousel/" and file.extname == ".webp" %}
+                <div class="gallery-item clickable-image">
+                    <img src="{{ file.path | relative_url }}" alt="{{ file.name }}" data-src="{{ file.path | relative_url }}">
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <a class="prev">&#10094;</a>
+    <img class="lightbox-content" id="lightbox-img">
+    <a class="next">&#10095;</a>
+</div>

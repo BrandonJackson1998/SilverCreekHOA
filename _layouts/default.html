@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: "Silver Creek HOA Community" }}</title>
+
+    <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}">
+    <link rel="icon" href="{{ '/Clubhouse.ico' | relative_url }}">
+    <link rel="shortcut icon" href="{{ '/Clubhouse.ico' | relative_url }}">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="site-header-inner">
+
+        <a href="{{ '/' | relative_url }}" class="site-logo">
+            Silver Creek Townhomes
+        </a>
+
+        {% assign pages_root = site.pages | where_exp:"p","p.path contains 'pages/'" %}
+        {% assign nav_groups = "" | split: "" %}
+
+        {% for p in pages_root %}
+            {% assign parts = p.path | split: "/" %}
+            {% if parts.size > 2 %}
+                {% assign folder = parts[1] %}
+                {% unless nav_groups contains folder %}
+                    {% assign nav_groups = nav_groups | push: folder %}
+                {% endunless %}
+            {% endif %}
+        {% endfor %}
+
+        {% assign nav_groups = nav_groups | sort %}
+
+        <nav class="navbar">
+            <ul class="navbar-menu">
+
+                <li class="nav-item">
+                    <a href="{{ '/' | relative_url }}" class="nav-link">Home</a>
+                </li>
+
+                {% for group in nav_groups %}
+
+                    {% assign group_pages = pages_root | where_exp:"p","p.path contains group" %}
+
+                    <li class="nav-item nav-dropdown">
+
+                        {% assign clean_group = group | split: " - " | last %}
+
+                        <a href="#" class="nav-link">{{ clean_group }}</a>
+
+                        <ul class="dropdown-menu">
+
+                            {% for page in group_pages %}
+                                {% if page.title and page.title != "index" %}
+                                <li>
+                                    <a href="{{ page.url | relative_url }}">
+                                        {{ page.title }}
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+        </nav>
+
+    </div>
+</header>
+
+<main class="container">
+    {{ content }}
+</main>
+
+<footer>
+    <p>&copy; 2024-2026 Site, pages and content - RSR Site Services</p>
+
+    <p>All Rights Reserved</p>
+</footer>
+
+<script src="{{ '/js/main.js' | relative_url }}"></script>
+
+</body>
+</html>
