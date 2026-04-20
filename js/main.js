@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', function () {
         checkNavbarOverflow();
     });
 
-/* =========================
-       PDF VIEWER MODAL (FIXED)
+    /* =========================
+    PDF VIEWER (DESKTOP MODAL + MOBILE NEW TAB)
     ========================= */
 
     const pdfModal = document.getElementById("pdf-modal");
@@ -185,21 +185,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll(".pdf-open").forEach(link => {
         link.addEventListener("click", (e) => {
-            e.preventDefault();
-    
+
             const url = link.dataset.pdf;
-    
-            const viewerUrl = url + "#view=FitV";
-    
-            pdfFrame.src = viewerUrl;
+
+            // 📱 MOBILE: open directly (fixes iPhone scrolling)
+            if (window.innerWidth <= 768) {
+                window.open(url, "_blank");
+                return;
+            }
+
+            // 💻 DESKTOP: open modal viewer
+            e.preventDefault();
+
+            pdfFrame.src = url + "#view=FitH";
             pdfDownload.href = url;
-    
+
             pdfModal.classList.add("active");
         });
     });
 
+    /* CLOSE BUTTON */
     document.querySelector("#pdf-modal .close")?.addEventListener("click", closePdf);
 
+    /* CLICK OUTSIDE TO CLOSE */
     pdfModal?.addEventListener("click", (e) => {
         if (e.target === pdfModal) closePdf();
     });
