@@ -432,10 +432,9 @@ body.menu-open {
     text-decoration: underline;
 }
 /* =========================
-   PDF VIEWER (FIXED)
+   PDF MODAL WRAPPER
 ========================= */
 
-/* Modal container */
 #pdf-modal {
     display: none;
     position: fixed;
@@ -443,16 +442,32 @@ body.menu-open {
     background: rgba(0,0,0,0.9);
     z-index: 3000;
 
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* smooth iPhone scroll */
-}
-
-#pdf-modal.active {
-    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
 }
 
-/* Close button (FIXED visibility) */
+/* ONLY show when active */
+#pdf-modal.active {
+    display: flex;
+}
+
+/* =========================
+   PDF BOX (THIS PREVENTS FULL SCREEN)
+========================= */
+
+.pdf-frame {
+    width: 90%;
+    height: 85vh;
+    border: none;
+    background: white;
+    border-radius: 6px;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
 #pdf-modal .close {
     position: absolute;
     top: 10px;
@@ -464,27 +479,15 @@ body.menu-open {
     cursor: pointer;
 }
 
-/* PDF iframe */
-.pdf-frame {
-    width: 100%;
-    height: 100vh;
-    border: none;
-    display: block;
-}
+/* =========================
+   DOWNLOAD BUTTON
+========================= */
 
-/* Download button */
 .pdf-download {
+    margin-top: 10px;
     color: white;
     background: #2c3e50;
     padding: 10px 15px;
     border-radius: 5px;
     text-decoration: none;
-    display: inline-block;
-    margin: 10px auto;
-}
-
-/* Optional actions container (centered) */
-.pdf-actions {
-    text-align: center;
-    padding: 10px;
 }

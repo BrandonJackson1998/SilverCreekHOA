@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* =========================
-    PDF VIEWER (DESKTOP MODAL + MOBILE NEW TAB)
+    PDF VIEWER (FIXED)
     ========================= */
 
     const pdfModal = document.getElementById("pdf-modal");
@@ -181,35 +181,46 @@ document.addEventListener('DOMContentLoaded', function () {
     function closePdf() {
         pdfModal?.classList.remove("active");
         if (pdfFrame) pdfFrame.src = "about:blank";
+        document.body.style.overflow = "";
     }
 
-    document.querySelectorAll(".pdf-open").forEach(link => {
-        link.addEventListener("click", (e) => {
+    function openPdf(url) {
 
-            const url = link.dataset.pdf;
-
-            // 📱 MOBILE: open directly (fixes iPhone scrolling)
-            if (window.innerWidth <= 768) {
-                window.open(url, "_blank");
-                return;
-            }
-
-            // 💻 DESKTOP: open modal viewer
-            e.preventDefault();
-
-            pdfFrame.src = url + "#view=FitV";
+        // 💻 DESKTOP → modal viewer
+        if (window.innerWidth > 768) {
+            pdfFrame.src = url + "#view=FitV&toolbar=1";
             pdfDownload.href = url;
-
             pdfModal.classList.add("active");
-        });
+            document.body.style.overflow = "hidden";
+            return;
+        }
+
+        // 📱 MOBILE → FORCE NEW TAB (NOT replace)
+        const newTab = window.open(url, "_blank");
+
+        // fallback (some iOS edge cases block window.open)
+        if (!newTab) {
+            window.location.href = url;
+        }
+    }
+
+    // event delegation (important: only ONE handler)
+    document.addEventListener("click", function (e) {
+
+        const link = e.target.closest(".pdf-open");
+        if (!link) return;
+
+        e.preventDefault();
+
+        const url = link.dataset.pdf || link.getAttribute("href");
+        if (!url) return;
+
+        openPdf(url);
     });
 
-    /* CLOSE BUTTON */
     document.querySelector("#pdf-modal .close")?.addEventListener("click", closePdf);
 
-    /* CLICK OUTSIDE TO CLOSE */
     pdfModal?.addEventListener("click", (e) => {
         if (e.target === pdfModal) closePdf();
     });
-
 });
