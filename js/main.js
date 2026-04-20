@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 💻 DESKTOP: open modal viewer
             e.preventDefault();
 
-            pdfFrame.src = url + "#view=FitH";
+            pdfFrame.src = url + "#view=FitV";
             pdfDownload.href = url;
 
             pdfModal.classList.add("active");
