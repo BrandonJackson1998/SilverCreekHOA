@@ -431,3 +431,18 @@ body.menu-open {
 .info-list a:hover {
     text-decoration: underline;
 }
+
+.pdf-frame {
+    width: 90%;
+    height: 85vh;
+    border: none;
+    background: white;
+}
+
+.pdf-download {
+    color: white;
+    background: #2c3e50;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}

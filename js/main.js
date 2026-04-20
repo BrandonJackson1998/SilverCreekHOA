@@ -170,4 +170,37 @@ document.addEventListener('DOMContentLoaded', function () {
         checkNavbarOverflow();
     });
 
+    /* =========================
+    PDF VIEWER MODAL
+    ========================= */
+
+    const pdfModal = document.getElementById("pdf-modal");
+    const pdfFrame = document.getElementById("pdf-frame");
+    const pdfDownload = document.getElementById("pdf-download");
+
+    document.querySelectorAll(".pdf-open").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const url = link.dataset.pdf;
+
+            pdfFrame.src = url;
+            pdfDownload.href = url;
+
+            pdfModal.classList.add("active");
+        });
+    });
+
+    document.querySelector("#pdf-modal .close")?.addEventListener("click", () => {
+        pdfModal.classList.remove("active");
+        pdfFrame.src = "";
+    });
+
+    pdfModal?.addEventListener("click", (e) => {
+        if (e.target === pdfModal) {
+            pdfModal.classList.remove("active");
+            pdfFrame.src = "";
+        }
+    });
+
 });
