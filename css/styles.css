@@ -446,3 +446,18 @@ body.menu-open {
     border-radius: 5px;
     text-decoration: none;
 }
+
+.pdf-actions {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.pdf-actions a {
+    color: white;
+    background: #2c3e50;
+    padding: 8px 14px;
+    border-radius: 5px;
+    text-decoration: none;
+}

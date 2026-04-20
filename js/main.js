@@ -170,37 +170,38 @@ document.addEventListener('DOMContentLoaded', function () {
         checkNavbarOverflow();
     });
 
-    /* =========================
-    PDF VIEWER MODAL
+/* =========================
+       PDF VIEWER MODAL (FIXED)
     ========================= */
 
     const pdfModal = document.getElementById("pdf-modal");
     const pdfFrame = document.getElementById("pdf-frame");
     const pdfDownload = document.getElementById("pdf-download");
 
+    function closePdf() {
+        pdfModal?.classList.remove("active");
+        if (pdfFrame) pdfFrame.src = "about:blank";
+    }
+
     document.querySelectorAll(".pdf-open").forEach(link => {
         link.addEventListener("click", (e) => {
             e.preventDefault();
-
+    
             const url = link.dataset.pdf;
-
-            pdfFrame.src = url;
+    
+            const viewerUrl = url + "#view=FitV&toolbar=1";
+    
+            pdfFrame.src = viewerUrl;
             pdfDownload.href = url;
-
+    
             pdfModal.classList.add("active");
         });
     });
 
-    document.querySelector("#pdf-modal .close")?.addEventListener("click", () => {
-        pdfModal.classList.remove("active");
-        pdfFrame.src = "";
-    });
+    document.querySelector("#pdf-modal .close")?.addEventListener("click", closePdf);
 
     pdfModal?.addEventListener("click", (e) => {
-        if (e.target === pdfModal) {
-            pdfModal.classList.remove("active");
-            pdfFrame.src = "";
-        }
+        if (e.target === pdfModal) closePdf();
     });
 
 });
