@@ -461,3 +461,28 @@ body.menu-open {
     border-radius: 5px;
     text-decoration: none;
 }
+
+/* PDF modal container */
+#pdf-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 3000;
+
+    overflow-y: auto; /* 🔥 KEY FIX */
+    -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+}
+
+#pdf-modal.active {
+    display: block;
+}
+
+/* PDF iframe */
+.pdf-frame {
+    width: 100%;
+    height: 90vh; /* 🔥 KEY FIX */
+    border: none;
+    display: block;
+    margin: 60px auto 20px;
+}

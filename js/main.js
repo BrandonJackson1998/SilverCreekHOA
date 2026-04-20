@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
             const url = link.dataset.pdf;
     
-            const viewerUrl = url + "#view=FitV&toolbar=1";
+            const viewerUrl = url + "#view=FitV&toolbar=1&navpanes=0";
     
             pdfFrame.src = viewerUrl;
             pdfDownload.href = url;
