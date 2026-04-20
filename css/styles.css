@@ -431,38 +431,11 @@ body.menu-open {
 .info-list a:hover {
     text-decoration: underline;
 }
+/* =========================
+   PDF VIEWER (FIXED)
+========================= */
 
-.pdf-frame {
-    width: 90%;
-    height: 85vh;
-    border: none;
-    background: white;
-}
-
-.pdf-download {
-    color: white;
-    background: #2c3e50;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-.pdf-actions {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-}
-
-.pdf-actions a {
-    color: white;
-    background: #2c3e50;
-    padding: 8px 14px;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-/* PDF modal container */
+/* Modal container */
 #pdf-modal {
     display: none;
     position: fixed;
@@ -470,19 +443,48 @@ body.menu-open {
     background: rgba(0,0,0,0.9);
     z-index: 3000;
 
-    overflow-y: auto; /* 🔥 KEY FIX */
-    -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* smooth iPhone scroll */
 }
 
 #pdf-modal.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Close button (FIXED visibility) */
+#pdf-modal .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 10;
+
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
 }
 
 /* PDF iframe */
 .pdf-frame {
     width: 100%;
-    height: 90vh; /* 🔥 KEY FIX */
+    height: 100vh;
     border: none;
     display: block;
-    margin: 60px auto 20px;
+}
+
+/* Download button */
+.pdf-download {
+    color: white;
+    background: #2c3e50;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px auto;
+}
+
+/* Optional actions container (centered) */
+.pdf-actions {
+    text-align: center;
+    padding: 10px;
 }
