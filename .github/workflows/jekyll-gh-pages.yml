@@ -1,51 +1,99 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Deploy Jekyll with Google Drive Sync
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+  schedule:
+    - cron: "0 0 * * 0"  # weekly
+
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  # Build job
+
+  # -----------------------------
+  # 1) SYNC JOB
+  # -----------------------------
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+
+    steps:
+      - name: Install rclone
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone
+
+      - name: Configure rclone
+        run: |
+          mkdir -p ~/.config/rclone
+          printf "%s" "${{ secrets.RCLONE_CONF }}" > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+
+      - name: Sync Google Drive HOA Docs
+        run: |
+          mkdir -p HOA-Documents
+
+          rclone sync "gdrive:1bWUFyVYUiZVGKmDa9KeFmRlk8lrCEgHF" HOA-Documents \
+            --quiet \
+            --stats 0 \
+            --timeout 10m
+
+      - name: Upload synced files
+        uses: actions/upload-artifact@v4
+        with:
+          name: hoa-docs
+          path: HOA-Documents
+
+
+  # -----------------------------
+  # 2) BUILD JOB
+  # -----------------------------
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: sync
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download Google Drive files
+        uses: actions/download-artifact@v4
+        with:
+          name: hoa-docs
+          path: HOA-Documents
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Build with Jekyll
+
+      - name: Build Jekyll site
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_site
-      - name: Upload artifact
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
 
-  # Deployment job
+
+  # -----------------------------
+  # 3) DEPLOY JOB
+  # -----------------------------
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: build
+
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v5
