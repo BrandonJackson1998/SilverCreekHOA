@@ -1,0 +1,34 @@
+title: "Page Title"
+
+sections:
+
+  - title: "Section Title"
+    id: "section-1"   # optional anchor id
+
+    content:
+
+      - type: paragraph
+        text: "A normal paragraph of text explaining something."
+
+      - type: heading
+        text: "Subsection Heading"
+
+      - type: list
+        style: bullet   # bullet | numbered
+        items:
+          - "First item"
+          - "Second item"
+          - "Third item"
+
+      - type: link
+        text: "Optional link text"
+        url: "/relative-or-external-url"
+
+      - type: note
+        level: info   # info | warning | success (optional styling hook)
+        text: "Important callout or notice."
+
+      - type: divider
+
+      - type: paragraph
+        text: "Another paragraph after a break."

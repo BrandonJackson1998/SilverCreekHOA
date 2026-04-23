@@ -5,4 +5,8 @@ url: "https://brandonjackson1998.github.io"
 # Explicitly tell Jekyll that this folder has static images
 static_files:
   - HOA-Documents
-  
+defaults:
+  - scope:
+      path: "pages"
+    values:
+      permalink: /:basename/

@@ -62,12 +62,12 @@ nav_order: 1
                 <!-- OPEN INLINE VIEWER -->
                 <a href="#"
                    class="pdf-open"
-                   data-pdf="{{ file.path | relative_url }}">
+                   data-pdf="{{ file.path | url_encode | relative_url }}">
                     {{ month }} {{ year }}
                 </a>
 
                 <!-- DOWNLOAD -->
-                <a href="{{ file.path | relative_url }}" download style="margin-left:10px;">
+                <a href="{{ file.path | url_encode | relative_url }}" download style="margin-left:10px;">
                     Download
                 </a>
 
