@@ -1,0 +1,31 @@
+---
+layout: default
+title: "Rules And Regulations"
+nav_order: 6
+---
+
+<h1>Adopted Rules and Regulations<br>by Resolution of the Board of Trustees</h1>
+
+<p>
+    Resolution # 25-02 (08-21-2025):<br>
+    Resolution to Establish Rules and Associated Schedule of Fines<br>
+    Exhibit A: Rules and Regulations Summary<br>
+    Exhibit B: Schedule of Fines and Definitions
+</p>
+
+{% assign rules_pdf = site.static_files 
+    | where_exp: "file", "file.path contains 'Resolution-25-03-Rules-and-Schedule-of-Fines.pdf'" 
+    | first %}
+
+{% if rules_pdf %}
+
+    <iframe 
+        src="{{ rules_pdf.path | relative_url }}" 
+        style="width:100%; height:900px; border:none; display:block;">
+    </iframe>
+
+{% else %}
+
+    <p>Rules and Schedule of Fines PDF not found.</p>
+
+{% endif %}

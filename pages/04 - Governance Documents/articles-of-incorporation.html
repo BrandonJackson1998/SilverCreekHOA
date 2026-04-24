@@ -1,0 +1,24 @@
+---
+layout: default
+title: "Articles Of Incorporation"
+nav_order: 1
+---
+
+<h1>Articles of Incorporation</h1>
+
+{% assign articles_pdf = site.static_files 
+    | where_exp: "file", "file.path contains 'STA-Articles-of-Incorporation'" 
+    | first %}
+
+{% if articles_pdf %}
+
+    <iframe 
+        src="{{ articles_pdf.path | relative_url }}" 
+        style="width:100%; height:900px; border:none; display:block;">
+    </iframe>
+
+{% else %}
+
+    <p>Articles of Incorporation PDF not found.</p>
+
+{% endif %}

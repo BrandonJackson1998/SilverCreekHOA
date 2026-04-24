@@ -1,0 +1,22 @@
+---
+layout: default
+title: "Welcome Packet"
+nav_order: 2
+---
+
+<h1>Welcome to Silver Creek</h1>
+
+{% assign welcome_pdf = site.static_files | where_exp: "file", "file.path contains 'Welcome Pack'" | first %}
+
+{% if welcome_pdf %}
+
+    <iframe 
+        src="{{ welcome_pdf.path | relative_url }}" 
+        style="width:100%; height:900px; border:none; display:block;">
+    </iframe>
+
+{% else %}
+
+    <p>Welcome Packet PDF not found.</p>
+
+{% endif %}

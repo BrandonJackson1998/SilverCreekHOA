@@ -1,0 +1,63 @@
+---
+layout: default
+title: "HOA Insurance Summary"
+nav_order: 3
+---
+
+<section class="container">
+
+    <h2>HOA Insurance Summary</h2>
+
+    <p>
+        Current Certificate of Property Insurance (latest available year).
+    </p>
+
+    <!-- =========================
+         GET ALL INSURANCE FILES
+    ========================== -->
+    {% assign insurance_files = site.static_files 
+      | where_exp: "file", "file.path contains 'HOA-Documents/Insurance'" 
+    %}
+
+    <!-- =========================
+         PRIORITIZE FILES THAT START WITH YEAR (YYYY)
+         (GitHub Pages SAFE)
+    ========================== -->
+    {% assign year_first = "" | split: "" %}
+
+    {% for file in insurance_files %}
+        {% assign first4 = file.name | slice: 0, 4 %}
+
+        {% if first4 == "2020" or first4 == "2021" or first4 == "2022" or first4 == "2023" or first4 == "2024" or first4 == "2025" or first4 == "2026" or first4 == "2027" or first4 == "2028" or first4 == "2029" %}
+            {% assign year_first = year_first | push: file %}
+        {% endif %}
+    {% endfor %}
+
+    {% assign sorted = year_first | sort: "name" | reverse %}
+    {% assign latest = sorted | first %}
+
+    <!-- =========================
+         FALLBACK (if no year-first files exist)
+    ========================== -->
+    {% if latest == nil %}
+        {% assign sorted = insurance_files | sort: "name" | reverse %}
+        {% assign latest = sorted | first %}
+    {% endif %}
+
+    <!-- =========================
+         DISPLAY PDF
+    ========================== -->
+    {% if latest %}
+
+        <iframe 
+            src="{{ latest.path | url_encode | relative_url }}"
+            style="width:100%; height:900px; border:none; display:block;">
+        </iframe>
+
+    {% else %}
+
+        <p>Insurance document not found.</p>
+
+    {% endif %}
+
+</section>

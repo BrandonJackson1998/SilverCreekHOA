@@ -1,0 +1,24 @@
+---
+layout: default
+title: "CC&Rs"
+nav_order: 2
+---
+
+<h1>Declaration of Covenants, Conditions and Restrictions (CC&Rs)</h1>
+
+{% assign ccrs_pdf = site.static_files 
+    | where_exp: "file", "file.path contains 'STA-Declarations-CC&R'" 
+    | first %}
+
+{% if ccrs_pdf %}
+
+    <iframe 
+        src="{{ ccrs_pdf.path | relative_url }}" 
+        style="width:100%; height:900px; border:none; display:block;">
+    </iframe>
+
+{% else %}
+
+    <p>CC&Rs PDF not found.</p>
+
+{% endif %}

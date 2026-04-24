@@ -1,0 +1,115 @@
+---
+layout: default
+title: "Minutes"
+nav_order: 4
+---
+
+<section class="container">
+    <h2>HOA Meeting Minutes</h2>
+    <p>Browse meeting minutes below.</p>
+
+    {% assign minutes = site.static_files | where_exp: "file", "file.extname == '.pdf'" %}
+
+    <!-- =========================
+         FILTER MINUTES
+    ========================== -->
+    {% assign filtered = "" | split: "" %}
+    {% for file in minutes %}
+        {% if file.path contains "HOA-Documents/Minutes" %}
+            {% assign name_lower = file.name | downcase %}
+            {% unless name_lower contains "annualmtg" %}
+                {% assign filtered = filtered | push: file %}
+            {% endunless %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- =========================
+         EXTRACT YEARS
+    ========================== -->
+    {% assign years = "" | split: "" %}
+
+    {% for file in filtered %}
+        {% assign raw = file.name | remove: "Minutes-" | remove: ".pdf" %}
+        {% assign parts = raw | split: "-" %}
+        {% assign year = parts[0] %}
+        {% unless years contains year %}
+            {% assign years = years | push: year %}
+        {% endunless %}
+    {% endfor %}
+
+    {% assign years = years | sort | reverse %}
+
+    <!-- =========================
+         DISPLAY BY YEAR
+    ========================== -->
+    {% for year in years %}
+        <h3 style="margin-top:30px;">{{ year }}</h3>
+
+        <ul class="info-list">
+
+        {% assign year_files = filtered | where_exp: "file", "file.name contains year" %}
+        {% assign sorted_files = year_files | sort: "name" | reverse %}
+
+        {% for file in sorted_files %}
+
+            {% assign raw = file.name | remove: "Minutes-" | remove: ".pdf" %}
+            {% assign parts = raw | split: "-" %}
+
+            {% assign year_val = parts[0] %}
+            {% assign month_num = parts[1] %}
+
+            <!-- CLEAN DAY (removes (+ExecSummary)) -->
+            {% assign day_raw = parts[2] %}
+            {% assign day = day_raw | split: "(" | first %}
+
+            <!-- MONTH CONVERSION (same as newsletters) -->
+            {% case month_num %}
+                {% when "01" %}{% assign month = "January" %}
+                {% when "02" %}{% assign month = "February" %}
+                {% when "03" %}{% assign month = "March" %}
+                {% when "04" %}{% assign month = "April" %}
+                {% when "05" %}{% assign month = "May" %}
+                {% when "06" %}{% assign month = "June" %}
+                {% when "07" %}{% assign month = "July" %}
+                {% when "08" %}{% assign month = "August" %}
+                {% when "09" %}{% assign month = "September" %}
+                {% when "10" %}{% assign month = "October" %}
+                {% when "11" %}{% assign month = "November" %}
+                {% when "12" %}{% assign month = "December" %}
+                {% else %}{% assign month = month_num %}
+            {% endcase %}
+
+            <li style="margin-bottom: 10px;">
+
+                <!-- OPEN INLINE PDF (HANDLED BY main.js) -->
+                <a href="#"
+                   class="pdf-open"
+                   data-pdf="{{ file.path | relative_url }}">
+                    {{ month }} {{ day }}, {{ year_val }}
+                </a>
+
+                <!-- DOWNLOAD -->
+                <a href="{{ file.path | relative_url }}" download style="margin-left:10px;">
+                    Download
+                </a>
+
+            </li>
+
+        {% endfor %}
+
+        </ul>
+    {% endfor %}
+</section>
+
+<!-- =========================
+     PDF MODAL (GLOBAL SYSTEM ONLY)
+========================= -->
+<div id="pdf-modal" class="lightbox">
+    <span class="close">&times;</span>
+
+    <iframe id="pdf-frame" class="pdf-frame"></iframe>
+
+    <a id="pdf-download" class="pdf-download" download>
+        Download PDF
+    </a>
+</div>
