@@ -39,20 +39,11 @@ jobs:
           echo "${{ secrets.RCLONE_CONF }}" | base64 -d > ~/.config/rclone/rclone.conf
           chmod 600 ~/.config/rclone/rclone.conf
 
-      - name: Debug rclone config
-        run: |
-          cat ~/.config/rclone/rclone.conf
-
       - name: Sync Google Drive HOA Docs
         run: |
           mkdir -p HOA-Documents
 
-          rclone sync gdrive: HOA-Documents \
-            --drive-root-folder-id 1bWUFyVYUiZVGKmDa9KeFmRlk8lrCEgHF \
-            --drive-shared-with-me \
-            --quiet \
-            --stats 0 \
-            --timeout 10m
+          rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me
 
       - name: Upload synced files
         uses: actions/upload-artifact@v4
