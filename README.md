@@ -38,7 +38,11 @@ All supporting PDFs, images, and media are stored in `HOA-Documents/`:
 
 ### Syncing from Google Drive
 
-Run the following command to keep local files in sync with the team's Google Drive:
+Ensure `rclone` is installed and a Google Cloud config profile has been created (via `rclone config`) before running:
+
+```bash
+rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me --progress
+```
 
 ```bash
 rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me --progress
