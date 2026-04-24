@@ -39,6 +39,10 @@ jobs:
           echo "${{ secrets.RCLONE_CONF_B64 }}" | base64 -d > ~/.config/rclone/rclone.conf
           chmod 600 ~/.config/rclone/rclone.conf
 
+      - name: Debug rclone config
+        run: |
+          cat ~/.config/rclone/rclone.conf
+
       - name: Sync Google Drive HOA Docs
         run: |
           mkdir -p HOA-Documents
