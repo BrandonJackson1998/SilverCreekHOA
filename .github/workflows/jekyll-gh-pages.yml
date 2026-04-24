@@ -36,7 +36,7 @@ jobs:
       - name: Configure rclone
         run: |
           mkdir -p ~/.config/rclone
-          echo "${{ secrets.RCLONE_CONF_B64 }}" | base64 -d > ~/.config/rclone/rclone.conf
+          echo "${{ secrets.RCLONE_CONF }}" | base64 -d > ~/.config/rclone/rclone.conf
           chmod 600 ~/.config/rclone/rclone.conf
 
       - name: Debug rclone config
@@ -47,7 +47,9 @@ jobs:
         run: |
           mkdir -p HOA-Documents
 
-          rclone sync "gdrive:1bWUFyVYUiZVGKmDa9KeFmRlk8lrCEgHF" HOA-Documents \
+          rclone sync gdrive: HOA-Documents \
+            --drive-root-folder-id 1bWUFyVYUiZVGKmDa9KeFmRlk8lrCEgHF \
+            --drive-shared-with-me \
             --quiet \
             --stats 0 \
             --timeout 10m
