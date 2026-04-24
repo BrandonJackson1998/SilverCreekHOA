@@ -1,9 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* =========================
-       LIGHTBOX (CENTER FIXED)
-    ========================= */
-
     const modal = document.getElementById("lightbox");
     const modalImg = document.getElementById("lightbox-img");
     const images = document.querySelectorAll('.gallery-item');
@@ -39,69 +35,72 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* =========================
-       HAMBURGER MENU
-    ========================= */
-
     const header = document.querySelector(".site-header");
     const headerInner = document.querySelector(".site-header-inner");
     const navbar = document.querySelector(".navbar");
+    const menu = document.querySelector(".navbar-menu");
 
-    let hamburger;
+    let hamburger = document.querySelector(".hamburger");
 
-    if (header && headerInner && navbar) {
+    function createHamburger() {
+        if (hamburger || !headerInner || !navbar) return;
 
         hamburger = document.createElement("div");
         hamburger.classList.add("hamburger");
-
         hamburger.innerHTML = `<span></span><span></span><span></span>`;
-
         headerInner.appendChild(hamburger);
 
-        // toggle menu
         hamburger.addEventListener("click", (e) => {
             e.stopPropagation();
             navbar.classList.toggle("open");
-        });
-
-        // close when clicking outside
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest(".navbar") && !e.target.closest(".hamburger")) {
-                navbar.classList.remove("open");
-            }
+            document.body.classList.toggle("menu-open");
         });
     }
 
-    /* =========================
-       MOBILE DROPDOWNS
-    ========================= */
+    createHamburger();
+
+    function checkNavbarOverflow() {
+        if (!header || !menu) return;
+
+        const headerWidth = header.getBoundingClientRect().width;
+        const menuWidth = menu.scrollWidth;
+
+        const shouldCollapse = menuWidth > (headerWidth - 220);
+
+        if (shouldCollapse) {
+            header.classList.add("overflow-mode");
+            navbar.classList.add("collapsed");
+            createHamburger();
+        } else {
+            header.classList.remove("overflow-mode");
+            navbar.classList.remove("collapsed");
+        }
+    }
+
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".navbar") && !e.target.closest(".hamburger")) {
+            navbar?.classList.remove("open");
+            document.body.classList.remove("menu-open");
+        }
+    });
 
     document.addEventListener("click", function (e) {
 
         const link = e.target.closest(".nav-dropdown > .nav-link");
 
         if (!link) return;
-
         if (window.innerWidth > 1024) return;
 
         e.preventDefault();
 
         const parent = link.parentElement;
-
         const isActive = parent.classList.contains("active");
 
-        document.querySelectorAll(".nav-dropdown").forEach(item => {
-            item.classList.remove("active");
-        });
+        document.querySelectorAll(".nav-dropdown")
+            .forEach(item => item.classList.remove("active"));
 
-        if (!isActive) {
-            parent.classList.add("active");
-        }
+        if (!isActive) parent.classList.add("active");
     });
-
-    /* =========================
-       CLOSE DROPDOWNS ON OUTSIDE CLICK
-    ========================= */
 
     document.addEventListener("click", function (e) {
         if (!e.target.closest(".nav-dropdown")) {
@@ -110,10 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    /* =========================
-       RESIZE CLEANUP
-    ========================= */
-
     window.addEventListener("resize", () => {
 
         if (window.innerWidth > 1024) {
@@ -121,58 +116,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 .forEach(el => el.classList.remove("active"));
 
             navbar?.classList.remove("open");
-            header?.classList.remove("overflow-mode");
             modal?.classList.remove("active");
         }
 
         checkNavbarOverflow();
     });
 
-    /* =========================
-       AUTO OVERFLOW → HAMBURGER SWITCH (FIXED)
-    ========================= */
-
-    function checkNavbarOverflow() {
-        const header = document.querySelector(".site-header");
-        const menu = document.querySelector(".navbar-menu");
-
-        if (!header || !menu) return;
-
-        // 🔥 FIX: reliable width calculation (mobile-safe)
-        const headerWidth = header.getBoundingClientRect().width;
-        const menuWidth = menu.scrollWidth;
-
-        const availableWidth = headerWidth - 220; // logo buffer
-
-        if (menuWidth > availableWidth) {
-            header.classList.add("overflow-mode");
-
-            // safety: ensure hamburger exists
-            if (!document.querySelector(".hamburger") && headerInner && navbar) {
-                headerInner.appendChild(hamburger);
-            }
-
-        } else {
-            header.classList.remove("overflow-mode");
-        }
+    function initNav() {
+        createHamburger();
+        requestAnimationFrame(checkNavbarOverflow);
+        setTimeout(checkNavbarOverflow, 100);
     }
 
-    // 🔥 FIX: timing issue (THIS is what broke iPhone DevTools)
-    window.addEventListener("load", () => {
-        setTimeout(checkNavbarOverflow, 50);
-    });
-
-    window.addEventListener("resize", () => {
-        setTimeout(checkNavbarOverflow, 50);
-    });
-
-    requestAnimationFrame(() => {
-        checkNavbarOverflow();
-    });
-
-    /* =========================
-    PDF VIEWER (FIXED)
-    ========================= */
+    window.addEventListener("load", initNav);
+    initNav();
 
     const pdfModal = document.getElementById("pdf-modal");
     const pdfFrame = document.getElementById("pdf-frame");
@@ -186,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function openPdf(url) {
 
-        // 💻 DESKTOP → modal viewer
         if (window.innerWidth > 768) {
             pdfFrame.src = url + "#view=FitV&toolbar=1";
             pdfDownload.href = url;
@@ -195,16 +151,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // 📱 MOBILE → FORCE NEW TAB (NOT replace)
         const newTab = window.open(url, "_blank");
 
-        // fallback (some iOS edge cases block window.open)
         if (!newTab) {
             window.location.href = url;
         }
     }
 
-    // event delegation (important: only ONE handler)
     document.addEventListener("click", function (e) {
 
         const link = e.target.closest(".pdf-open");
@@ -223,4 +176,5 @@ document.addEventListener('DOMContentLoaded', function () {
     pdfModal?.addEventListener("click", (e) => {
         if (e.target === pdfModal) closePdf();
     });
+
 });

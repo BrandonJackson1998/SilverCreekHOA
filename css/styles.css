@@ -23,7 +23,7 @@ body {
 }
 
 /* =========================
-   NAVBAR (DESKTOP)
+   HEADER / NAVBAR (DESKTOP)
 ========================= */
 
 .site-header {
@@ -80,6 +80,7 @@ body {
     align-items: center;
     white-space: nowrap;
     font-weight: 500;
+    font-size: 14px; 
 }
 
 .nav-link:hover {
@@ -156,11 +157,6 @@ body {
     font-size: 16px;
 }
 
-.main-highlight {
-    text-align: center;
-}
-
-/* Typography */
 .container h1,
 .container h2,
 .container h3 {
@@ -196,10 +192,6 @@ body {
     border: none;
     border-top: 1px solid #ddd;
 }
-
-/* =========================
-   YAML SECTION SYSTEM
-========================= */
 
 .container section {
     margin-bottom: 40px;
@@ -304,7 +296,8 @@ footer {
    LIGHTBOX
 ========================= */
 
-.lightbox {
+.lightbox,
+#pdf-modal {
     display: none;
     position: fixed;
     inset: 0;
@@ -314,7 +307,8 @@ footer {
     align-items: center;
 }
 
-.lightbox.active {
+.lightbox.active,
+#pdf-modal.active {
     display: flex;
 }
 
@@ -349,21 +343,6 @@ footer {
    PDF MODAL
 ========================= */
 
-#pdf-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.9);
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-#pdf-modal.active {
-    display: flex;
-}
-
 .pdf-frame {
     width: 90%;
     height: 85vh;
@@ -373,12 +352,9 @@ footer {
 }
 
 #pdf-modal .close {
-    position: absolute;
     top: 10px;
     right: 20px;
     font-size: 32px;
-    color: white;
-    cursor: pointer;
 }
 
 .pdf-download {
@@ -398,18 +374,14 @@ body.menu-open {
     overflow: hidden;
 }
 
-.hamburger {
-    display: none;
-}
-
-.navbar {
-    display: flex;
-}
-
 @media (max-width: 1024px) {
 
     .hamburger {
         display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        margin-left: 10px;
     }
 
     .navbar {
@@ -475,6 +447,10 @@ body.menu-open {
         color: white;
     }
 }
+
+/* =========================
+   IMAGES
+========================= */
 
 .center-image-main {
     width: 100%;
