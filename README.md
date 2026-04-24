@@ -4,24 +4,28 @@
 
 ---
 
-## Quick Links
+## File Structure
 
-| Section | Description |
-|---------|-------------|
-| [About](pages/01%20-%20About/) | Welcome info, FAQ, community contact |
-| [Management](pages/02%20-%20Management/) | Board of trustees, committees, budget, insurance |
-| [Meetings](pages/03%20-%20Meetings/) | Board meeting dates, agendas & minutes |
-| [Governance](pages/04%20-%20Governance%20Documents/) | CC&Rs, bylaws, CCR amendments, resolutions, rules |
-| [Calendar](pages/05%20-%20Calendar/) | Annual meeting & community events |
-| [Newsletters](pages/06%20-%20Newsletters/) | Monthly HOA newsletters |
-| [Real Estate](pages/07%20-%20Realtor%20Info/) | Agent & closing provider resources |
-| [Forms](pages/08%20-%20Forms/) | ARA requests, clubhouse rental, concerns, estate sale, board candidacy |
-| [Resources](pages/09%20-%20Resources/) | Additional community resources |
-| [Things to Do](pages/10%20-%20Things%20to%20Do/) | Local attractions |
-
-**HOA Contact:** SilvercreekBoardMembers@gmail.com | (435) 414-1817
-
----
+ ```
+   ├── .github/             # GitHub Actions (CI/CD)
+   ├── HOA-Documents/       # Synced Google Drive docs
+   │   ├── Agendas/
+   │   ├── Documents/       
+   │   ├── Financial/
+   │   ├── Forms/
+   │   ├── Governing-Documents/
+   │   ├── Insurance/
+   │   ├── Minutes/
+   │   ├── Newsletters/
+   │   └── Website-Image-Carousel/
+   ├── _config.yml          # Jekyll configuration
+   ├── _layouts/            # Jekyll page templates
+   ├── css/                 # Custom styles
+   ├── js/                  # Main site logic
+   ├── pages/               # Website Markdown pages
+   ├── Gemfile              # Ruby dependencies
+   └── LICENSE
+ ```
 
 ## Docs & Media
 
@@ -39,10 +43,6 @@ All supporting PDFs, images, and media are stored in `HOA-Documents/`:
 ### Syncing from Google Drive
 
 Ensure `rclone` is installed and a Google Cloud config profile has been created (via `rclone config`) before running:
-
-```bash
-rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me --progress
-```
 
 ```bash
 rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me --progress
