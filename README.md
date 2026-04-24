@@ -36,6 +36,14 @@ All supporting PDFs, images, and media are stored in `HOA-Documents/`:
 - `Newsletters/` — monthly community newsletters
 - `Website-Image-Carousel/` — clubhouse & amenity photos
 
+### Syncing from Google Drive
+
+Run the following command to keep local files in sync with the team's Google Drive:
+
+```bash
+rclone sync "gdrive:¹Website-HOA-Docs" HOA-Documents --drive-shared-with-me --progress
+```
+
 ---
 
 ## Tech Stack
