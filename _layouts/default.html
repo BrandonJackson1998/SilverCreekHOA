@@ -39,8 +39,8 @@
 
                 {% for group in nav_groups %}
 
-                    {% assign group_pages = pages_root 
-                        | where_exp:"p","p.path contains group" 
+                    {% assign group_pages = pages_root
+                        | where_exp:"p","p.path contains group"
                         | sort: "nav_order" %}
 
                     <li class="nav-item nav-dropdown">
@@ -49,10 +49,8 @@
 
                         <a href="#" class="nav-link">{{ clean_group }}</a>
 
-                        <!-- LAYER 2: Categories (e.g., Forms, Governance) generated using your exact logic structure -->
                         <ul class="dropdown-menu">
-                            
-                            <!-- 1. Dynamically gather all unique subfolders inside this main group folder -->
+
                             {% assign sub_groups = "" | split: "" %}
                             {% for p in group_pages %}
                                 {% assign parts = p.path | split: "/" %}
@@ -65,23 +63,21 @@
                             {% endfor %}
                             {% assign sub_groups = sub_groups | sort %}
 
-                            <!-- 2. Loop through discovered subfolders -->
                             {% for sub_group in sub_groups %}
                                 <li class="nested-dropdown">
                                     {% assign clean_sub = sub_group | split: " - " | last %}
                                     <a href="#" class="nested-toggle">{{ clean_sub }}</a>
 
-                                    <!-- LAYER 3: Files inside this subfolder -->
                                     <ul class="nested-menu">
                                         {% for page in group_pages %}
                                             {% assign page_parts = page.path | split: "/" %}
                                             {% if page_parts[2] == sub_group %}
                                                 {% if page.title and page.title != "index" %}
-                                                <li>
-                                                    <a href="{{ page.url | relative_url }}">
-                                                        {{ page.title }}
-                                                    </a>
-                                                </li>
+                                                    <li>
+                                                        <a href="{{ page.url | relative_url }}">
+                                                            {{ page.title }}
+                                                        </a>
+                                                    </li>
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
@@ -89,16 +85,15 @@
                                 </li>
                             {% endfor %}
 
-                            <!-- 3. Fallback: Catch any files living directly in the main folder without a subfolder -->
                             {% for page in group_pages %}
                                 {% assign page_parts = page.path | split: "/" %}
                                 {% if page_parts.size == 3 %}
                                     {% if page.title and page.title != "index" %}
-                                    <li>
-                                        <a href="{{ page.url | relative_url }}">
-                                            {{ page.title }}
-                                        </a>
-                                    </li>
+                                        <li>
+                                            <a href="{{ page.url | relative_url }}">
+                                                {{ page.title }}
+                                            </a>
+                                        </li>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
@@ -111,6 +106,12 @@
             </ul>
         </nav>
 
+        <!-- Search Bar (outside navbar so it stays in header on mobile) -->
+        <div class="search-nav-item">
+            <input type="text" id="search-input" placeholder="Search site...">
+            <div id="search-results" class="search-results-dropdown"></div>
+        </div>
+
     </div>
 </header>
 
@@ -122,6 +123,19 @@
     <p>&copy; 2024-2026 Site, pages and content - RSR Site Services</p>
     <p>All Rights Reserved</p>
 </footer>
+
+<!-- Hidden HTML data store to prevent JSON parsing and string escaping errors -->
+<div id="site-search-data" style="display: none;">
+    {% for p in site.pages %}
+        {% if p.title and p.url != "/search.json" and p.layout != nil %}
+            <div class="search-entry"
+                 data-title="{{ p.title | escape }}"
+                 data-url="{{ p.url | relative_url | escape }}">
+                {{ p.content | strip_html }}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 
 <script src="{{ '/js/main.js' | relative_url }}"></script>
 

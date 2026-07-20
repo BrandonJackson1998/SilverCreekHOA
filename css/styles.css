@@ -41,6 +41,7 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    position: relative;
     align-items: center;
     padding: 0 20px;
     height: 50px;
@@ -55,8 +56,11 @@ body {
 }
 
 .navbar {
+    position: relative;
     display: flex;
+    justify-content: center;
     align-items: center;
+    flex: 1;
 }
 
 .navbar-menu {
@@ -93,7 +97,7 @@ body {
 
 .dropdown-menu {
     position: absolute;
-    top: 100%;
+    top: 120%;
     left: 0;
     background: white;
     min-width: 250px;
@@ -471,7 +475,7 @@ body.menu-open {
 }
 
 /* =========================
-   3-LAYER DROPDOWN EXTENSIONS (DESKTOP)
+   3-LAYER DROPDOWN EXTENSIONS
 ========================= */
 
 .nested-dropdown {
@@ -537,76 +541,138 @@ body.menu-open {
     }
 }
 
-/* =========================
-   3-LAYER DROPDOWN EXTENSIONS
-========================= */
-
-.nested-dropdown {
-    position: relative;
-}
-
-/* Hide Layer 3 by default */
-.nested-menu {
-    position: absolute;
-    top: -8px; 
-    left: 100%; /* Position right beside layer 2 menu */
-    background: white;
-    min-width: 250px;
-    list-style: none;
-    padding: 8px 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-left: 1px solid #e6e6e6;
-    
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-10px);
-    transition: 0.2s ease;
-    z-index: 1001;
-}
-
-/* Desktop Hover: Show Layer 3 */
-@media (min-width: 1025px) {
-    .nested-dropdown:hover .nested-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
-    }
-    
-    .dropdown-menu a.nested-toggle::after {
-        content: " ▸";
-        float: right;
-        color: #999;
-    }
-}
-
-/* Mobile Stacking Configurations */
-@media (max-width: 1024px) {
-    .nested-menu {
-        position: static;
-        display: none;
-        width: 100%;
-        background: rgba(0,0,0,0.05);
-        padding-left: 12px;
-        box-shadow: none;
-        transform: none;
-        opacity: 1;
-        visibility: visible;
-        border-left: none; /* Removes the white line on mobile views */
-    }
-    
-    .nested-dropdown.active .nested-menu {
-        display: block;
-    }
-
-    .dropdown-menu a.nested-toggle::after {
-        content: " ▾";
-        float: right;
-    }
-}
-
 /* Center the navbar menu items */
-@media (min-width: 1025px) {
-    .navbar {
-        margin: 0 auto;
+
+/* ==========================================
+   SITE SEARCH STYLES
+   ========================================== */
+.search-nav-item {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    padding: 0;
+    order: 0;
+}
+
+#search-input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s ease;
+    width: 160px;
+}
+
+#search-input:focus {
+    background: #fff;
+    color: #333;
+    width: 200px;
+}
+
+#search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#search-input:focus::placeholder {
+    color: #999;
+}
+
+.search-results-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;         /* Changed to right-align to match far-right setup */
+    left: auto;        /* Clear the previous left rule */
+    width: 300px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    margin-top: 5px;
+    overflow: hidden;
+    z-index: 99999;
+}
+
+.search-result-item {
+    display: block;
+    padding: 10px 14px;
+    text-decoration: none !important;
+    color: #333 !important;
+    border-bottom: 1px solid #eee;
+    transition: background 0.15s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: #f5f7fa;
+}
+
+.search-result-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #2c3e50;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+.search-result-snippet {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: left;
+}
+
+.search-no-result {
+    padding: 12px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    background: white;
+}
+
+.search-highlight {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Adjust layout rules for clean stacking on mobile views */
+@media (max-width: 1024px) {
+
+    .search-nav-item {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+        padding: 0;
+        margin: 0;
+        z-index: 10002;
     }
+
+    #search-input {
+        width: 160px;
+        background: rgba(255,255,255,.05);
+    }
+
+    .search-results-dropdown {
+        width: 300px;
+        right: 0;
+        left: auto;
+        position: absolute;
+        margin-top: 5px;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
 }
