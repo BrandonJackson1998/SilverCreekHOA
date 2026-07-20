@@ -42,6 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let hamburger = document.querySelector(".hamburger");
 
+    // Collapses all active layers and clears overflow body blocks on close
+    function closeMobileMenu() {
+        navbar?.classList.remove("open");
+        document.body.classList.remove("menu-open");
+        
+        document.querySelectorAll(".nav-dropdown, .nested-dropdown").forEach(item => {
+            item.classList.remove("active");
+        });
+    }
+
     function createHamburger() {
         if (hamburger || !headerInner || !navbar) return;
 
@@ -52,8 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hamburger.addEventListener("click", (e) => {
             e.stopPropagation();
-            navbar.classList.toggle("open");
-            document.body.classList.toggle("menu-open");
+            if (navbar.classList.contains("open")) {
+                closeMobileMenu();
+            } else {
+                navbar.classList.add("open");
+                document.body.classList.add("menu-open");
+            }
         });
     }
 
@@ -77,10 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Handles clicks outside the navbar element to close the context clean
     document.addEventListener("click", (e) => {
         if (!e.target.closest(".navbar") && !e.target.closest(".hamburger")) {
-            navbar?.classList.remove("open");
-            document.body.classList.remove("menu-open");
+            closeMobileMenu();
         }
     });
 
@@ -175,6 +189,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     pdfModal?.addEventListener("click", (e) => {
         if (e.target === pdfModal) closePdf();
+    });
+
+    // Handle Layer 3 sub-category accordion expansion on mobile layouts
+    document.addEventListener("click", function (e) {
+        const nestedToggle = e.target.closest(".nested-toggle");
+        if (!nestedToggle) return;
+        if (window.innerWidth > 1024) return;
+
+        e.preventDefault();
+        const parentLi = nestedToggle.parentElement;
+        const wasActive = parentLi.classList.contains("active");
+
+        // Collapse sibling sub-menus
+        parentLi.parentElement.querySelectorAll(".nested-dropdown").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        if (!wasActive) {
+            parentLi.classList.add("active");
+        }
     });
 
 });

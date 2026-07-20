@@ -1,0 +1,138 @@
+---
+layout: default
+title: "Resolutions"
+nav_order: 5
+---
+
+<h1>Resolutions of the Board of Trustees</h1>
+
+<!-- ===================== TOP INDEX SECTION ===================== -->
+<h2>Contents</h2>
+
+{% assign all_files = site.static_files | where_exp: "file", "file.extname == '.pdf'" %}
+{% assign resolutions = "" | split: "" %}
+
+{% for file in all_files %}
+    {% if file.path contains "HOA-Documents/Governing-Documents/Resolutions" %}
+        {% assign resolutions = resolutions | push: file %}
+    {% endif %}
+{% endfor %}
+
+<!-- Sorted by name (oldest first) -->
+{% assign sorted_resolutions = resolutions | sort: "name" %}
+
+<ul>
+    {% for file in sorted_resolutions %}
+        {% assign clean_name = file.name | remove: ".pdf" | remove: "Resolution-" %}
+        {% assign parts = clean_name | split: "-" %}
+        
+        <!-- Extract Resolution Number (e.g., 24-01) -->
+        {% assign res_num = parts[0] | append: "-" | append: parts[1] %}
+        
+        <!-- Isolate the date segment if it exists -->
+        {% assign total_parts = parts.size %}
+        {% assign day_idx = total_parts | minus: 1 %}
+        {% assign month_idx = total_parts | minus: 2 %}
+        {% assign year_idx = total_parts | minus: 3 %}
+        
+        {% assign date_string = "" %}
+        {% if parts[year_idx].size == 4 and parts[month_idx].size == 2 and parts[day_idx].size == 2 %}
+            {% assign date_string = " (" | append: parts[year_idx] | append: "-" | append: parts[month_idx] | append: "-" | append: parts[day_idx] | append: ")" %}
+        {% endif %}
+
+        <!-- Clean up description text -->
+        {% assign desc = clean_name | remove_first: parts[0] | remove_first: "-" | remove_first: parts[1] %}
+        {% if date_string != "" %}
+            {% assign raw_date = parts[year_idx] | append: "-" | append: parts[month_idx] | append: "-" | append: parts[day_idx] %}
+            {% assign desc = desc | remove: raw_date | remove: "--" %}
+        {% endif %}
+        
+        {% assign desc = desc | replace: "-", " " %}
+
+        <!-- DYNAMIC LOWER-TO-UPPERCASE SPACE INJECTOR -->
+        {% assign uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | split: "" %}
+        {% assign lowercase = "abcdefghijklmnopqrstuvwxyz" | split: "" %}
+        {% assign chars = desc | split: "" %}
+        {% assign formatted_desc = "" %}
+        
+        {% for char in chars %}
+            {% assign idx = forloop.index0 %}
+            {% assign prev_idx = idx | minus: 1 %}
+            
+            {% if idx > 0 %}
+                {% assign prev_char = chars[prev_idx] %}
+                <!-- Check if previous character is lowercase AND current character is uppercase -->
+                {% if lowercase contains prev_char and uppercase contains char %}
+                    {% assign formatted_desc = formatted_desc | append: " " %}
+                {% endif %}
+            {% endif %}
+            
+            {% assign formatted_desc = formatted_desc | append: char %}
+        {% endfor %}
+        {% assign desc = formatted_desc | strip %}
+
+        <li>
+            Resolution #{{ res_num }} — {{ desc }}{{ date_string }}
+        </li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<!-- ===================== RESOLUTIONS DISPLAY ===================== -->
+{% for file in sorted_resolutions %}
+    {% assign clean_name = file.name | remove: ".pdf" | remove: "Resolution-" %}
+    {% assign parts = clean_name | split: "-" %}
+    {% assign res_num = parts[0] | append: "-" | append: parts[1] %}
+    
+    {% assign total_parts = parts.size %}
+    {% assign day_idx = total_parts | minus: 1 %}
+    {% assign month_idx = total_parts | minus: 2 %}
+    {% assign year_idx = total_parts | minus: 3 %}
+    
+    {% assign date_string = "" %}
+    {% if parts[year_idx].size == 4 and parts[month_idx].size == 2 and parts[day_idx].size == 2 %}
+        {% assign date_string = " (" | append: parts[year_idx] | append: "-" | append: parts[month_idx] | append: "-" | append: parts[day_idx] | append: ")" %}
+    {% endif %}
+
+    {% assign desc = clean_name | remove_first: parts[0] | remove_first: "-" | remove_first: parts[1] %}
+    {% if date_string != "" %}
+        {% assign raw_date = parts[year_idx] | append: "-" | append: parts[month_idx] | append: "-" | append: parts[day_idx] %}
+        {% assign desc = desc | remove: raw_date | remove: "--" %}
+    {% endif %}
+    
+    {% assign desc = desc | replace: "-", " " %}
+
+    <!-- DYNAMIC LOWER-TO-UPPERCASE SPACE INJECTOR -->
+    {% assign uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | split: "" %}
+    {% assign lowercase = "abcdefghijklmnopqrstuvwxyz" | split: "" %}
+    {% assign chars = desc | split: "" %}
+    {% assign formatted_desc = "" %}
+    
+    {% for char in chars %}
+        {% assign idx = forloop.index0 %}
+        {% assign prev_idx = idx | minus: 1 %}
+        
+        {% if idx > 0 %}
+            {% assign prev_char = chars[prev_idx] %}
+            {% if lowercase contains prev_char and uppercase contains char %}
+                {% assign formatted_desc = formatted_desc | append: " " %}
+            {% endif %}
+        {% endif %}
+        
+        {% assign formatted_desc = formatted_desc | append: char %}
+    {% endfor %}
+    {% assign desc = formatted_desc | strip %}
+
+    <p>
+        <strong>Resolution #{{ res_num }}{{ date_string }}</strong><br>
+        {{ desc }}
+    </p>
+
+    <iframe 
+        src="{{ file.path | url_encode | relative_url }}"
+        style="width:100%; height:900px; border:none; display:block; margin-bottom: 40px;">
+    </iframe>
+
+    <hr>
+{% endfor %}

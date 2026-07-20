@@ -387,7 +387,7 @@ body.menu-open {
     .navbar {
         position: absolute;
         top: 50px;
-        right: 10px;
+        left: 10px; 
         width: 280px;
         max-width: 85vw;
 
@@ -444,7 +444,12 @@ body.menu-open {
     }
 
     .dropdown-menu a {
-        color: white;
+        color: #cccccc; 
+    }
+    
+    .dropdown-menu a:hover {
+        background: rgba(255,255,255,0.1);
+        color: #ffffff;
     }
 }
 
@@ -463,4 +468,145 @@ body.menu-open {
 .image-wrapper {
     width: 100%;
     overflow: hidden;
+}
+
+/* =========================
+   3-LAYER DROPDOWN EXTENSIONS (DESKTOP)
+========================= */
+
+.nested-dropdown {
+    position: relative;
+}
+
+/* Hide Layer 3 by default */
+.nested-menu {
+    position: absolute;
+    top: -8px; 
+    left: 100%; /* Position right beside layer 2 menu */
+    background: white;
+    min-width: 250px;
+    list-style: none;
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 1px solid #e6e6e6;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: 0.2s ease;
+    z-index: 1001;
+}
+
+/* Desktop Hover Interaction: Show Layer 3 */
+@media (min-width: 1025px) {
+    .nested-dropdown:hover .nested-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
+    
+    .dropdown-menu a.nested-toggle::after {
+        content: " ▸";
+        float: right;
+        color: #999;
+    }
+}
+
+/* Mobile Stacking Configurations */
+@media (max-width: 1024px) {
+    .nested-menu {
+        position: static;
+        display: none;
+        width: 100%;
+        background: rgba(0,0,0,0.05);
+        padding-left: 12px;
+        box-shadow: none;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        border-left: none; 
+    }
+    
+    .nested-dropdown.active .nested-menu {
+        display: block;
+    }
+
+    .dropdown-menu a.nested-toggle::after {
+        content: " ▾";
+        float: right;
+    }
+}
+
+/* =========================
+   3-LAYER DROPDOWN EXTENSIONS
+========================= */
+
+.nested-dropdown {
+    position: relative;
+}
+
+/* Hide Layer 3 by default */
+.nested-menu {
+    position: absolute;
+    top: -8px; 
+    left: 100%; /* Position right beside layer 2 menu */
+    background: white;
+    min-width: 250px;
+    list-style: none;
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 1px solid #e6e6e6;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: 0.2s ease;
+    z-index: 1001;
+}
+
+/* Desktop Hover: Show Layer 3 */
+@media (min-width: 1025px) {
+    .nested-dropdown:hover .nested-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
+    
+    .dropdown-menu a.nested-toggle::after {
+        content: " ▸";
+        float: right;
+        color: #999;
+    }
+}
+
+/* Mobile Stacking Configurations */
+@media (max-width: 1024px) {
+    .nested-menu {
+        position: static;
+        display: none;
+        width: 100%;
+        background: rgba(0,0,0,0.05);
+        padding-left: 12px;
+        box-shadow: none;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        border-left: none; /* Removes the white line on mobile views */
+    }
+    
+    .nested-dropdown.active .nested-menu {
+        display: block;
+    }
+
+    .dropdown-menu a.nested-toggle::after {
+        content: " ▾";
+        float: right;
+    }
+}
+
+/* Center the navbar menu items */
+@media (min-width: 1025px) {
+    .navbar {
+        margin: 0 auto;
+    }
 }
