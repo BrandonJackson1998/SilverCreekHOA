@@ -131,7 +131,14 @@
             <div class="search-entry"
                  data-title="{{ p.title | escape }}"
                  data-url="{{ p.url | relative_url | escape }}">
-                {{ p.content | strip_html }}
+                {% comment %} Clean raw Liquid markup and HTML before outputting {% endcomment %}
+                {% assign clean_text = p.content | strip_html %}
+                {% assign lines = clean_text | newline_to_br | split: '<br />' %}
+                {% for line in lines %}
+                    {% unless line contains '{%' or line contains '{{' %}
+                        {{ line | strip }}
+                    {% endunless %}
+                {% endfor %}
             </div>
         {% endif %}
     {% endfor %}

@@ -97,7 +97,7 @@ body {
 
 .dropdown-menu {
     position: absolute;
-    top: 120%;
+    top: 100%;
     left: 0;
     background: white;
     min-width: 250px;
