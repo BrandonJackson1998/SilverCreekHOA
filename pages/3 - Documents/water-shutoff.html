@@ -1,0 +1,22 @@
+---
+layout: default
+title: "Water Shutoff"
+nav_order: 4
+---
+
+<h1>Whole-House Water Shutoff</h1>
+
+{% assign water_shutoff_pdf = site.static_files | where_exp: "file", "file.path contains 'Whole-house-Water-shutoff'" | first %}
+
+{% if water_shutoff_pdf %}
+
+    <iframe 
+        src="{{ water_shutoff_pdf.path | relative_url }}" 
+        style="width:100%; height:900px; border:none; display:block;">
+    </iframe>
+
+{% else %}
+
+    <p>Whole-house Water Shutoff PDF not found.</p>
+
+{% endif %}

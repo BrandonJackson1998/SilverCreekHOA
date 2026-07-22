@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Committees"
-nav_order: 4
+nav_order: 3
 ---
 
 ## Silver Creek Townhomes Association — Committees

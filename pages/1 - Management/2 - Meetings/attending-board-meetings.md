@@ -4,46 +4,36 @@ title: "Attending Board Meetings via Zoom"
 nav_order: 2
 ---
 
-## Silver Creek Townhomes Association Board of Trustees Meeting  
--- Zoom parking page --
+## Attending Board Meetings via Zoom
+
+*Silver Creek Townhomes Association Board of Trustees*
 
 ---
 
-## Silver Creek HOA Board meeting Zoom links are unavailable online until 2~3 days prior to the meeting.
-
-The meeting itself is not opened on Zoom to join until 15 minutes prior to the meeting.
-
----
-
-The schedule for Trustee Meetings and the Annual Meeting is published here on the web site home page.
+> **Note on Zoom Links:**  
+> Zoom links for Silver Creek HOA meetings are posted **2–3 days prior** to the scheduled meeting. The Zoom meeting room itself opens **15 minutes before** the meeting start time.
 
 ---
 
-## Homeowners attending HOA Meetings by Zoom
+### Overview & Access
 
-You may attend both Silver Creek Monthly Trustee and Annual Homeowner Meetings via Zoom.
+Homeowners are welcome to attend both monthly Trustee Meetings and the Annual Homeowner Meeting via Zoom. 
 
-Homeowner Open Comments are generally the first agenda item.
-
----
-
-## NOTE: Annual Meeting
-
-Persons attending via Zoom are not permitted to vote.
-
-To vote in the Annual Meeting:
-- Please either attend in person  
-**OR**
-- Register another homeowner to vote in-person as Proxy on your behalf
-
-Homeowners who have submitted Proxy statements are counted toward the "Quorum" requirement for voting purposes (minimum number necessary for Association to hold member votes).
+* **Meeting Schedule:** Meeting dates are available on the home page and the Board Meeting Dates page.
+* **Homeowner Comments:** The Homeowner Open Forum is generally the first agenda item.
+* **Finding the Link:** A direct Zoom link and login details are published **48 hours prior** to each meeting via:
+  * Email (sent to the email address on file)
+  * The monthly Agenda posted on the Agendas page
+  * The [Silver Creek HOA Home Page](https://silvercreek-hoa.org)
 
 ---
 
-The Meeting Agenda information is sent each month to the email address on record.
+### Important Notice for Annual Meetings
 
-The Meeting Agenda is also posted on the website home page and Agendas page 48-hours prior to the meeting.
+**Persons attending via Zoom are not permitted to vote.**
 
----
+To cast a vote for the Annual Meeting, you must:
+1. **Attend in person**, OR
+2. **Assign a Proxy** to delegate your vote to another homeowner attending in person.
 
-A direct link for Zoom is also posted in the meeting Agenda and on Silvercreek-HOA.org website home page 48-hours prior to the meeting.
+*Submitting a Proxy statement ensures your vote is represented and helps establish the required **quorum** for the meeting.*

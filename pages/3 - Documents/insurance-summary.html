@@ -1,0 +1,51 @@
+---
+layout: default
+title: "Insurance Summary"
+nav_order: 3
+---
+
+<section class="container">
+
+    <h2>HOA Insurance Summary</h2>
+
+    <p>Current Certificate of Property Insurance (latest available year).</p>
+
+    <!-- =========================
+         GET ALL INSURANCE FILES
+    ========================== -->
+    {% assign insurance_files = site.static_files 
+      | where_exp: "file", "file.path contains 'HOA-Documents/Insurance'" 
+    %}
+
+    <!-- Filter files containing years or sort directly -->
+    {% assign sorted_files = insurance_files | sort: "name" | reverse %}
+    
+    <!-- Filter specifically for files starting with a digit/year if preferred -->
+    {% assign year_files = "" | split: "" %}
+    {% for file in sorted_files %}
+      {% assign first_char = file.name | slice: 0, 1 %}
+      {% if "0123456789" contains first_char %}
+        {% assign year_files = year_files | push: file %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- Pick the latest year-prefixed file, or fall back to reverse sorted -->
+    {% assign latest = year_files | first | default: sorted_files.first %}
+
+    <!-- =========================
+         DISPLAY PDF
+    ========================== -->
+    {% if latest %}
+
+        <iframe 
+            src="{{ latest.path | url_encode | relative_url }}"
+            style="width:100%; height:900px; border:none; display:block;">
+        </iframe>
+
+    {% else %}
+
+        <p>Insurance document not found.</p>
+
+    {% endif %}
+
+</section>

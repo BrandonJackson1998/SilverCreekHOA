@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Forms List"
-nav_order: 1
+title: "Forms"
+nav_order: 2
 ---
 
 <h1>Community Forms</h1>
