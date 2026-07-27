@@ -10,15 +10,12 @@ nav_order: 1
   {% assign txt_page = site.pages | where_exp: "p", "p.name == 'Board-of-Trustees.txt'" | first %}
 
   {% if txt_page %}
-{% assign clean_content = txt_page.content | replace: "
-", "
-" | strip %}
-{% assign raw_blocks = clean_content | replace: "
-
-", "|||" | split: "|||" %}
+{% assign raw_content = txt_page.content | strip %}
+{% assign paragraphs = raw_content | newline_to_br | split: "<br />
+<br />" %}
 {% capture formatted_md %}
-{% for block in raw_blocks %}
-{% assign lines = block | strip | newline_to_br | split: "<br />" %}
+{% for block in paragraphs %}
+{% assign lines = block | strip | split: "<br />" %}
 {% assign title_line = lines[0] | strip %}
 {% if title_line == "Officers of the Association" or title_line == "Trustees" %}
 
