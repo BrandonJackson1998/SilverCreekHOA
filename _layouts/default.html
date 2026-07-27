@@ -15,10 +15,6 @@
 <header class="site-header">
     <div class="site-header-inner">
 
-        <a href="{{ '/' | relative_url }}" class="site-logo">
-            Silver Creek Townhomes
-        </a>
-
         {% assign pages_root = site.pages | where_exp:"p","p.path contains 'pages/'" %}
         {% assign nav_groups = "" | split: "" %}
 
@@ -43,8 +39,8 @@
 
                 {% for group in nav_groups %}
 
-                    {% assign group_pages = pages_root 
-                        | where_exp:"p","p.path contains group" 
+                    {% assign group_pages = pages_root
+                        | where_exp:"p","p.path contains group"
                         | sort: "nav_order" %}
 
                     <li class="nav-item nav-dropdown">
@@ -55,13 +51,50 @@
 
                         <ul class="dropdown-menu">
 
-                            {% for page in group_pages %}
-                                {% if page.title and page.title != "index" %}
-                                <li>
-                                    <a href="{{ page.url | relative_url }}">
-                                        {{ page.title }}
-                                    </a>
+                            {% assign sub_groups = "" | split: "" %}
+                            {% for p in group_pages %}
+                                {% assign parts = p.path | split: "/" %}
+                                {% if parts.size > 3 %}
+                                    {% assign sub_folder = parts[2] %}
+                                    {% unless sub_groups contains sub_folder %}
+                                        {% assign sub_groups = sub_groups | push: sub_folder %}
+                                    {% endunless %}
+                                {% endif %}
+                            {% endfor %}
+                            {% assign sub_groups = sub_groups | sort %}
+
+                            {% for sub_group in sub_groups %}
+                                <li class="nested-dropdown">
+                                    {% assign clean_sub = sub_group | split: " - " | last %}
+                                    <a href="#" class="nested-toggle">{{ clean_sub }}</a>
+
+                                    <ul class="nested-menu">
+                                        {% for page in group_pages %}
+                                            {% assign page_parts = page.path | split: "/" %}
+                                            {% if page_parts[2] == sub_group %}
+                                                {% if page.title and page.title != "index" %}
+                                                    <li>
+                                                        <a href="{{ page.url | relative_url }}">
+                                                            {{ page.title }}
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
                                 </li>
+                            {% endfor %}
+
+                            {% for page in group_pages %}
+                                {% assign page_parts = page.path | split: "/" %}
+                                {% if page_parts.size == 3 %}
+                                    {% if page.title and page.title != "index" %}
+                                        <li>
+                                            <a href="{{ page.url | relative_url }}">
+                                                {{ page.title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
 
@@ -72,6 +105,12 @@
 
             </ul>
         </nav>
+
+        <!-- Search Bar (outside navbar so it stays in header on mobile) -->
+        <div class="search-nav-item">
+            <input type="text" id="search-input" placeholder="Search site...">
+            <div id="search-results" class="search-results-dropdown"></div>
+        </div>
 
     </div>
 </header>
@@ -84,6 +123,26 @@
     <p>&copy; 2024-2026 Site, pages and content - RSR Site Services</p>
     <p>All Rights Reserved</p>
 </footer>
+
+<!-- Hidden HTML data store to prevent JSON parsing and string escaping errors -->
+<div id="site-search-data" style="display: none;">
+    {% for p in site.pages %}
+        {% if p.title and p.url != "/search.json" and p.layout != nil %}
+            <div class="search-entry"
+                 data-title="{{ p.title | escape }}"
+                 data-url="{{ p.url | relative_url | escape }}">
+                {% comment %} Clean raw Liquid markup and HTML before outputting {% endcomment %}
+                {% assign clean_text = p.content | strip_html %}
+                {% assign lines = clean_text | newline_to_br | split: '<br />' %}
+                {% for line in lines %}
+                    {% unless line contains '{%' or line contains '{{' %}
+                        {{ line | strip }}
+                    {% endunless %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 
 <script src="{{ '/js/main.js' | relative_url }}"></script>
 

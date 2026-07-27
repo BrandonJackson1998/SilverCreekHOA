@@ -42,6 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let hamburger = document.querySelector(".hamburger");
 
+    // Collapses all active layers and clears overflow body blocks on close
+    function closeMobileMenu() {
+        navbar?.classList.remove("open");
+        document.body.classList.remove("menu-open");
+        
+        document.querySelectorAll(".nav-dropdown, .nested-dropdown").forEach(item => {
+            item.classList.remove("active");
+        });
+    }
+
     function createHamburger() {
         if (hamburger || !headerInner || !navbar) return;
 
@@ -52,8 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hamburger.addEventListener("click", (e) => {
             e.stopPropagation();
-            navbar.classList.toggle("open");
-            document.body.classList.toggle("menu-open");
+            if (navbar.classList.contains("open")) {
+                closeMobileMenu();
+            } else {
+                navbar.classList.add("open");
+                document.body.classList.add("menu-open");
+            }
         });
     }
 
@@ -77,10 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Handles clicks outside the navbar element to close the context clean
     document.addEventListener("click", (e) => {
         if (!e.target.closest(".navbar") && !e.target.closest(".hamburger")) {
-            navbar?.classList.remove("open");
-            document.body.classList.remove("menu-open");
+            closeMobileMenu();
         }
     });
 
@@ -175,6 +189,107 @@ document.addEventListener('DOMContentLoaded', function () {
 
     pdfModal?.addEventListener("click", (e) => {
         if (e.target === pdfModal) closePdf();
+    });
+
+    // Handle Layer 3 sub-category accordion expansion on mobile layouts
+    document.addEventListener("click", function (e) {
+        const nestedToggle = e.target.closest(".nested-toggle");
+        if (!nestedToggle) return;
+        if (window.innerWidth > 1024) return;
+
+        e.preventDefault();
+        const parentLi = nestedToggle.parentElement;
+        const wasActive = parentLi.classList.contains("active");
+
+        // Collapse sibling sub-menus
+        parentLi.parentElement.querySelectorAll(".nested-dropdown").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        if (!wasActive) {
+            parentLi.classList.add("active");
+        }
+    });
+
+    // ==========================================
+    // HYBRID HTML-PARSED CLIENT SEARCH ENGINE
+    // ==========================================
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    let siteSearchIndex = null;
+
+    // Build the searchable index dynamically from the hidden HTML elements
+    function buildSearchIndex() {
+        if (siteSearchIndex) return;
+        
+        const entries = document.querySelectorAll('#site-search-data .search-entry');
+        siteSearchIndex = Array.from(entries).map(entry => {
+            return {
+                title: entry.getAttribute('data-title'),
+                url: entry.getAttribute('data-url'),
+                content: entry.textContent.replace(/\s+/g, ' ').trim()
+            };
+        });
+    }
+
+    function generateSnippet(content, query) {
+        const index = content.toLowerCase().indexOf(query.toLowerCase());
+        if (index === -1) return content.slice(0, 80) + "...";
+
+        const start = Math.max(0, index - 30);
+        const end = Math.min(content.length, index + query.length + 50);
+        
+        let snippet = content.slice(start, end);
+        if (start > 0) snippet = "..." + snippet;
+        if (end < content.length) snippet = snippet + "...";
+
+        const regex = new RegExp(`(${query})`, 'gi');
+        return snippet.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    searchInput?.addEventListener('focus', buildSearchIndex);
+    searchInput?.addEventListener('input', function() {
+        buildSearchIndex();
+        const query = this.value.trim();
+        searchResults.innerHTML = '';
+
+        if (!query || !siteSearchIndex) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const matches = siteSearchIndex.filter(page => 
+            page.title.toLowerCase().includes(query.toLowerCase()) || 
+            page.content.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (matches.length === 0) {
+            searchResults.innerHTML = '<div class="search-no-result">No matches found</div>';
+            searchResults.style.display = 'block';
+            return;
+        }
+
+        matches.slice(0, 5).forEach(page => {
+            const resultItem = document.createElement('a');
+            resultItem.href = page.url;
+            resultItem.className = 'search-result-item';
+
+            const snippetText = generateSnippet(page.content, query);
+
+            resultItem.innerHTML = `
+                <div class="search-result-title">${page.title}</div>
+                <div class="search-result-snippet">${snippetText}</div>
+            `;
+            searchResults.appendChild(resultItem);
+        });
+
+        searchResults.style.display = 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-nav-item')) {
+            if (searchResults) searchResults.style.display = 'none';
+        }
     });
 
 });
