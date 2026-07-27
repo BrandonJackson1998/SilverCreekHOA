@@ -1,5 +1,31 @@
-*.txt text eol=lf
+# Default: all text files use LF line endings
+* text eol=lf
+
+# Explicit Jekyll/web text files
 *.md text eol=lf
+*.html text eol=lf
+*.txt text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.liquid text eol=lf
+
+# Binary files (do not modify line endings)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.svg binary
+*.pdf binary
+*.zip binary
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
+# Video/media
+*.mp4 binary
+*.webm binary
