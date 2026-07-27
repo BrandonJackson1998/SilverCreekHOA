@@ -7,7 +7,7 @@ nav_order: 1
 <section class="container">
   <h2>2026 Silver Creek Townhomes Board of Trustees</h2>
 
-  {% assign txt_page = site.pages | where_exp: "p", "p.path contains 'Board-of-Trustees.txt'" | first %}
+  {% assign txt_page = site.pages | where_exp: "p", "p.name == 'Board-of-Trustees.txt'" | first %}
 
   {% if txt_page %}
     {% capture formatted_md %}
@@ -34,6 +34,8 @@ nav_order: 1
     {% endcapture %}
 
     {{ formatted_md | markdownify }}
+  {% else %}
+    <p><em>Board details are currently unavailable.</em></p>
   {% endif %}
 
   ---
