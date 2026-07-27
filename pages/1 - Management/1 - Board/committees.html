@@ -1,0 +1,54 @@
+---
+layout: default
+title: "Committees"
+nav_order: 3
+---
+
+<section class="container">
+  <h2>Silver Creek Townhomes Association — Committees</h2>
+
+  {% assign txt_page = site.pages | where_exp: "p", "p.path contains 'Committees.txt'" | first %}
+
+  {% if txt_page %}
+    {% capture formatted_md %}
+{% assign paragraphs = txt_page.content | strip | split: "
+
+" %}
+{% for block in paragraphs %}
+{% assign lines = block | strip | newline_to_br | split: "<br />" %}
+{% assign first_line = lines[0] | strip %}
+
+{% if first_line contains "(" and first_line contains ")" %}
+*{{ first_line }}*
+
+---
+
+{% elsif lines.size > 0 %}
+### {{ first_line }}
+
+{% assign is_member_list = false %}
+{% for line in lines offset:1 %}
+{% assign clean = line | strip %}
+{% if clean contains "Oversight/Advisor:" %}
+- **{{ clean }}**  
+{% elsif clean == "Members:" %}
+- **Members:**  
+{% assign is_member_list = true %}
+{% elsif clean != "" %}
+{% if is_member_list %}
+  - {{ clean }}  
+{% else %}
+  - {{ clean }}  
+{% endif %}
+{% endif %}
+{% endfor %}
+
+---
+
+{% endif %}
+{% endfor %}
+    {% endcapture %}
+
+    {{ formatted_md | markdownify }}
+  {% endif %}
+</section>

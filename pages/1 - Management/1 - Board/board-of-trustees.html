@@ -1,0 +1,42 @@
+---
+layout: default
+title: "Current Board Of Trustees"
+nav_order: 1
+---
+
+<section class="container">
+  <h2>2026 Silver Creek Townhomes Board of Trustees</h2>
+
+  {% assign txt_page = site.pages | where_exp: "p", "p.path contains 'Board-of-Trustees.txt'" | first %}
+
+  {% if txt_page %}
+    {% capture formatted_md %}
+{% assign paragraphs = txt_page.content | strip | split: "
+
+" %}
+{% for block in paragraphs %}
+{% assign lines = block | strip | newline_to_br | split: "<br />" %}
+{% assign title_line = lines[0] | strip %}
+{% if title_line == "Officers of the Association" or title_line == "Trustees" %}
+{% if title_line == "Trustees" %}
+---
+{% endif %}
+
+### {{ title_line }}
+
+{% elsif lines.size > 1 %}
+- **{{ lines[0] | strip }}**  
+{% for line in lines offset:1 %}{% assign clean_line = line | strip %}{% if clean_line contains "Phone:" %}{% assign phone_num = clean_line | replace: "Phone:", "" | strip %}  Phone: <a href="tel:{{ phone_num | remove: '-' }}">{{ phone_num }}</a>  
+{% elsif clean_line != "" %}  {{ clean_line }}  
+{% endif %}{% endfor %}
+{% endif %}
+{% endfor %}
+    {% endcapture %}
+
+    {{ formatted_md | markdownify }}
+  {% endif %}
+
+  ---
+
+  <p><strong>Note:</strong> All elected positions are 3-year terms. Appointed positions fill the remaining term of a vacated position.</p>
+</section>
