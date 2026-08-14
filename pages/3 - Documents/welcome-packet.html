@@ -6,7 +6,16 @@ nav_order: 1
 
 <h1>Welcome to Silver Creek</h1>
 
-{% assign welcome_pdf = site.static_files | where_exp: "file", "file.path contains 'Welcome Pack'" | first %}
+{% assign welcome_pdfs = site.static_files | where_exp: "file", "file.path contains 'Welcome Pack'" %}
+
+{% assign active_pdfs = "" | split: "" %}
+{% for file in welcome_pdfs %}
+  {% unless file.name contains "OLD-" %}
+    {% assign active_pdfs = active_pdfs | push: file %}
+  {% endunless %}
+{% endfor %}
+
+{% assign welcome_pdf = active_pdfs | first %}
 
 {% if welcome_pdf %}
 
