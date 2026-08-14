@@ -7,7 +7,6 @@ nav_order: 1
 # Silver Creek Townhomes — St. George, Utah
 
 **Address:** 1732 West 540 North, St. George, UT 84770  
-**Coordinates:** `37.119232, -113.620482` | **PlusCode:** `499H+5Q, St. George, UT`  
 
 Located between Westridge Drive and Dixie Drive in St. George, Utah, Silver Creek features no through streets, offering a quiet and safe low-traffic neighborhood.
 

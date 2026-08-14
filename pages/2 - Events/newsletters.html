@@ -10,18 +10,27 @@ nav_order: 1
 
     {% assign newsletters = site.static_files | where_exp: "file", "file.extname == '.pdf'" %}
 
+    <!-- =========================
+         1. FILTER NEWSLETTERS
+    ========================== -->
     {% assign filtered = "" | split: "" %}
     {% for file in newsletters %}
         {% if file.path contains "HOA-Documents/Newsletters" %}
-            {% assign filtered = filtered | push: file %}
+            {% unless file.name contains "+" or file.name contains "OLD-" %}
+                {% assign filtered = filtered | push: file %}
+            {% endunless %}
         {% endif %}
     {% endfor %}
 
+    <!-- =========================
+         2. EXTRACT YEARS
+    ========================== -->
     {% assign years = "" | split: "" %}
 
     {% for file in filtered %}
-        {% assign name = file.name | remove: "Newsletter-" | split: "-" %}
-        {% assign year = name[0] %}
+        {% assign cleaned = file.name | remove: ".pdf" | remove: "Newsletter-" %}
+        {% assign parts = cleaned | split: "-" %}
+        {% assign year = parts[0] %}
         {% unless years contains year %}
             {% assign years = years | push: year %}
         {% endunless %}
@@ -29,18 +38,40 @@ nav_order: 1
 
     {% assign years = years | sort | reverse %}
 
+    <!-- =========================
+         3. DISPLAY BY YEAR
+    ========================== -->
     {% for year in years %}
         <h3 style="margin-top:30px;">{{ year }}</h3>
 
         <ul class="info-list">
 
-        {% assign year_files = filtered | where_exp: "file", "file.name contains year" %}
-        {% assign sorted_files = year_files | sort: "name" | reverse %}
+        <!-- Build YYYY-MM sort key pairs for the current year -->
+        {% assign date_file_pairs = "" | split: "" %}
 
-        {% for file in sorted_files %}
-            {% assign parts = file.name | remove: ".pdf" | remove: "Newsletter-" | split: "-" %}
-            {% assign month_num = parts[1] %}
+        {% for file in filtered %}
+            {% assign cleaned = file.name | remove: ".pdf" | remove: "Newsletter-" %}
+            {% assign date_parts = cleaned | split: "-" %}
+            
+            {% if date_parts[0] == year %}
+                {% assign sort_key = cleaned | append: ":::" | append: file.path %}
+                {% assign date_file_pairs = date_file_pairs | push: sort_key %}
+            {% endif %}
+        {% endfor %}
 
+        <!-- Sort strictly by YYYY-MM in reverse (newest to oldest) -->
+        {% assign sorted_pairs = date_file_pairs | sort | reverse %}
+
+        {% for pair in sorted_pairs %}
+            {% assign parts = pair | split: ":::" %}
+            {% assign date_key = parts[0] %}
+            {% assign file_path = parts[1] %}
+
+            {% assign date_parts = date_key | split: "-" %}
+            {% assign year_val = date_parts[0] %}
+            {% assign month_num = date_parts[1] %}
+
+            <!-- MONTH CONVERSION -->
             {% case month_num %}
                 {% when "01" %}{% assign month = "January" %}
                 {% when "02" %}{% assign month = "February" %}
@@ -62,12 +93,12 @@ nav_order: 1
                 <!-- OPEN INLINE VIEWER -->
                 <a href="#"
                    class="pdf-open"
-                   data-pdf="{{ file.path | url_encode | relative_url }}">
-                    {{ month }} {{ year }}
+                   data-pdf="{{ file_path | relative_url }}">
+                    {{ month }} {{ year_val }}
                 </a>
 
                 <!-- DOWNLOAD -->
-                <a href="{{ file.path | url_encode | relative_url }}" download style="margin-left:10px;">
+                <a href="{{ file_path | relative_url }}" download style="margin-left:10px;">
                     Download
                 </a>
 
