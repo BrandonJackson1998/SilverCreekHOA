@@ -84,16 +84,7 @@ You are welcome to freely share information from our public website: [https://si
   | where_exp: "file", "file.path contains 'Community-Map-paper.pdf'" 
   | first %}
 
-{% if map_pdf %}
-
-<div class="pdf-wrapper">
-        <iframe 
-            src="{{ map_pdf.path | relative_url }}">
-        </iframe>
-    </div>
-
-{% else %}
-
-<p>Community Map not found.</p>
-
+{% assign map_img = site.static_files | where_exp: "file", "file.path contains 'Community-Map-paper'" | first %}
+{% if map_img %}
+  <img src="{{ map_img.path | relative_url }}" alt="Silver Creek Community Map" style="max-width:500px; width:100%; height:auto; border-radius:8px; margin: 20px auto; display:block;" />
 {% endif %}
