@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ==========================================
-    // INLINE PDF.JS MULTI-PAGE RENDERER (HiDPI / Crisp Text)
+    // INLINE PDF.JS MULTI-PAGE RENDERER (Super-Sampled Crisp Text)
     // ==========================================
     const pdfContainers = document.querySelectorAll("[data-pdf-embed]");
 
@@ -323,17 +323,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         const cssScale = (containerWidth - 32) / unscaledViewport.width;
                         const baseScale = cssScale > 0 ? cssScale : 1.0;
 
-                        // Detect screen pixel ratio (Mobile Retina = 2x or 3x)
-                        const dpr = window.devicePixelRatio || 1;
-                        const viewport = page.getViewport({ scale: baseScale * dpr });
+                        // Force super-sampling: Minimum 3x multiplier on mobile for crisp text
+                        const isMobile = window.innerWidth <= 768;
+                        const renderMultiplier = isMobile ? Math.max(window.devicePixelRatio || 1, 3) : (window.devicePixelRatio || 1);
+                        
+                        const renderViewport = page.getViewport({ scale: baseScale * renderMultiplier });
+                        const displayViewport = page.getViewport({ scale: baseScale });
 
-                        // Set physical canvas pixel dimensions (High DPI)
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
+                        // Set physical canvas pixel dimensions (High Resolution)
+                        canvas.height = Math.floor(renderViewport.height);
+                        canvas.width = Math.floor(renderViewport.width);
 
-                        // Set CSS display dimensions back to normal scale
-                        canvas.style.width = (viewport.width / dpr) + "px";
-                        canvas.style.height = (viewport.height / dpr) + "px";
+                        // Set CSS display dimensions (Standard Resolution)
+                        canvas.style.width = Math.floor(displayViewport.width) + "px";
+                        canvas.style.height = Math.floor(displayViewport.height) + "px";
                         canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
                         canvas.style.borderRadius = "4px";
 
@@ -341,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         page.render({
                             canvasContext: ctx,
-                            viewport: viewport
+                            viewport: renderViewport
                         });
                     });
                 }
