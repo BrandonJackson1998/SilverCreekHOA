@@ -19,10 +19,11 @@ nav_order: 6
 
 {% if rules_pdf %}
 
-    <iframe 
-        src="{{ rules_pdf.path | relative_url }}" 
-        style="width:100%; height:900px; border:none; display:block;">
-    </iframe>
+    <div class="pdf-wrapper">
+        <iframe 
+            src="{{ rules_pdf.path | relative_url }}">
+        </iframe>
+    </div>
 
 {% else %}
 

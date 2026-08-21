@@ -2,6 +2,11 @@ title: Silver Creek HOA
 description: The Silver Creek Community Website
 baseurl: ""
 url: "https://www.silvercreek-hoa.org"
+
+# Enable redirect-from plugin for GitHub Pages
+plugins:
+  - jekyll-redirect-from
+
 # Explicitly tell Jekyll that this folder has static images
 static_files:
   - HOA-Documents

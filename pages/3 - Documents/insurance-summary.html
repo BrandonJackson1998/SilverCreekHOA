@@ -37,10 +37,11 @@ nav_order: 3
     ========================== -->
     {% if latest %}
 
-        <iframe 
-            src="{{ latest.path | url_encode | relative_url }}"
-            style="width:100%; height:900px; border:none; display:block;">
-        </iframe>
+        <div class="pdf-wrapper">
+            <iframe 
+                src="{{ latest.path | url_encode | relative_url }}">
+            </iframe>
+        </div>
 
     {% else %}
 

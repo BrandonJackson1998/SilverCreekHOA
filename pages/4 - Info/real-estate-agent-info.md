@@ -86,10 +86,11 @@ You are welcome to freely share information from our public website: [https://si
 
 {% if map_pdf %}
 
-<iframe 
-  src="{{ map_pdf.path | relative_url }}"
-  style="width:100%; height:900px; border:none; display:block;">
-</iframe>
+<div class="pdf-wrapper">
+        <iframe 
+            src="{{ map_pdf.path | relative_url }}">
+        </iframe>
+    </div>
 
 {% else %}
 
