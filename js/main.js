@@ -292,4 +292,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ==========================================
+    // INLINE PDF.JS MULTI-PAGE RENDERER
+    // ==========================================
+    const pdfContainers = document.querySelectorAll("[data-pdf-embed]");
+
+    if (pdfContainers.length > 0 && window.pdfjsLib) {
+        pdfContainers.forEach(function (container) {
+            const url = container.getAttribute("data-pdf-embed");
+            const loadingText = container.querySelector(".pdf-loading");
+
+            // Container layout styles
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.alignItems = "center";
+            container.style.gap = "16px";
+            container.style.marginTop = "20px";
+            container.style.width = "100%";
+
+            pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                if (loadingText) loadingText.remove();
+
+                // Render every page as an HTML canvas element
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                    pdf.getPage(pageNum).then(function (page) {
+                        const canvas = document.createElement("canvas");
+                        canvas.style.maxWidth = "100%";
+                        canvas.style.height = "auto";
+                        canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+                        canvas.style.borderRadius = "4px";
+
+                        const containerWidth = container.clientWidth || window.innerWidth;
+                        const unscaledViewport = page.getViewport({ scale: 1.0 });
+                        const scale = (containerWidth - 20) / unscaledViewport.width;
+                        const viewport = page.getViewport({ scale: scale > 0 ? scale : 1.0 });
+
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        container.appendChild(canvas);
+
+                        page.render({
+                            canvasContext: canvas.getContext("2d"),
+                            viewport: viewport
+                        });
+                    });
+                }
+            }).catch(function () {
+                if (loadingText) {
+                    loadingText.innerHTML = 'Unable to render inline. <a href="' + url + '" target="_blank">Tap here to view PDF</a>.';
+                }
+            });
+        });
+    }
 });
