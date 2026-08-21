@@ -12,10 +12,18 @@ nav_order: 2
         <strong>2026 Budget</strong><br>
     </p>
 
-    <div class="pdf-wrapper">
-        <iframe 
-            src="{{ '/HOA-Documents/Financial/Budget-Summary-2026.pdf' | relative_url }}">
-        </iframe>
+    <div class="pdf-container-card">
+        <div class="pdf-toolbar">
+            <div class="pdf-toolbar-actions">
+                <a href="{{ '/HOA-Documents/Financial/Budget-Summary-2026.pdf' | relative_url }}" download class="pdf-toolbar-action">📥 Download</a>
+                <a href="{{ '/HOA-Documents/Financial/Budget-Summary-2026.pdf' | relative_url }}" target="_blank" class="pdf-toolbar-action">↗ Full Screen</a>
+            </div>
+        </div>
+        <div class="pdf-wrapper">
+            <div class="pdf-render-container" data-pdf-embed="{{ '/HOA-Documents/Financial/Budget-Summary-2026.pdf' | relative_url }}">
+                <p class="pdf-loading">Loading document...</p>
+            </div>
+        </div>
     </div>
 
     <hr>

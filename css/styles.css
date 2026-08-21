@@ -763,10 +763,59 @@ details[open] summary.faq-question {
     margin-bottom: 4px;
 }
 
+/* PDF Reader Container Rules */
+.pdf-container-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9f9fb;
+    margin-top: 20px;
+}
+
+.pdf-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #eee;
+    padding: 10px 16px;
+    border-bottom: 1px solid #ddd;
+    font-family: inherit;
+}
+
+.pdf-toolbar-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.pdf-toolbar-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.pdf-toolbar-action {
+    text-decoration: none;
+    color: #222;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pdf-toolbar-action:hover {
+    color: #0056b3;
+}
+
+/* Scrollable Container Wrapper */
 .pdf-wrapper {
     width: 100%;
     height: 900px;
+    max-height: 80vh;
     overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -775,4 +824,10 @@ details[open] summary.faq-question {
     height: 100%;
     border: none;
     display: block;
+}
+
+.pdf-loading {
+    color: #666;
+    font-style: italic;
+    text-align: center;
 }

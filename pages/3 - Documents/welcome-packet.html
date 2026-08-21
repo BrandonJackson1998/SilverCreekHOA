@@ -19,11 +19,19 @@ nav_order: 1
 
 {% if welcome_pdf %}
 
-    <div class="pdf-wrapper">
-        <iframe 
-            src="{{ welcome_pdf.path | relative_url }}">
-        </iframe>
+    <div class="pdf-container-card">
+    <div class="pdf-toolbar">
+        <div class="pdf-toolbar-actions">
+            <a href="{{ welcome_pdf.path | relative_url }}" download class="pdf-toolbar-action">📥 Download</a>
+            <a href="{{ welcome_pdf.path | relative_url }}" target="_blank" class="pdf-toolbar-action">↗ Full Screen</a>
+        </div>
     </div>
+    <div class="pdf-wrapper">
+        <div class="pdf-render-container" data-pdf-embed="{{ welcome_pdf.path | relative_url }}">
+            <p class="pdf-loading">Loading document...</p>
+        </div>
+    </div>
+</div>
 
 {% else %}
 
