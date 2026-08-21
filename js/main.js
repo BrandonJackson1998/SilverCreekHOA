@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ==========================================
-    // INLINE PDF.JS MULTI-PAGE RENDERER
+    // INLINE PDF.JS MULTI-PAGE RENDERER (HiDPI / Crisp Text)
     // ==========================================
     const pdfContainers = document.querySelectorAll("[data-pdf-embed]");
 
@@ -302,38 +302,45 @@ document.addEventListener('DOMContentLoaded', function () {
             const url = container.getAttribute("data-pdf-embed");
             const loadingText = container.querySelector(".pdf-loading");
 
-            // Container layout styles
             container.style.display = "flex";
             container.style.flexDirection = "column";
             container.style.alignItems = "center";
             container.style.gap = "16px";
-            container.style.marginTop = "20px";
             container.style.width = "100%";
 
             pdfjsLib.getDocument(url).promise.then(function (pdf) {
                 if (loadingText) loadingText.remove();
 
-                // Render every page as an HTML canvas element
                 for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
                     pdf.getPage(pageNum).then(function (page) {
                         const canvas = document.createElement("canvas");
-                        canvas.style.maxWidth = "100%";
-                        canvas.style.height = "auto";
-                        canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
-                        canvas.style.borderRadius = "4px";
+                        const ctx = canvas.getContext("2d");
 
                         const containerWidth = container.clientWidth || window.innerWidth;
                         const unscaledViewport = page.getViewport({ scale: 1.0 });
-                        const scale = (containerWidth - 20) / unscaledViewport.width;
-                        const viewport = page.getViewport({ scale: scale > 0 ? scale : 1.0 });
+                        
+                        // Base layout scale based on container width
+                        const cssScale = (containerWidth - 32) / unscaledViewport.width;
+                        const baseScale = cssScale > 0 ? cssScale : 1.0;
 
+                        // Detect screen pixel ratio (Mobile Retina = 2x or 3x)
+                        const dpr = window.devicePixelRatio || 1;
+                        const viewport = page.getViewport({ scale: baseScale * dpr });
+
+                        // Set physical canvas pixel dimensions (High DPI)
                         canvas.height = viewport.height;
                         canvas.width = viewport.width;
+
+                        // Set CSS display dimensions back to normal scale
+                        canvas.style.width = (viewport.width / dpr) + "px";
+                        canvas.style.height = (viewport.height / dpr) + "px";
+                        canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+                        canvas.style.borderRadius = "4px";
 
                         container.appendChild(canvas);
 
                         page.render({
-                            canvasContext: canvas.getContext("2d"),
+                            canvasContext: ctx,
                             viewport: viewport
                         });
                     });
@@ -345,4 +352,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
 });
