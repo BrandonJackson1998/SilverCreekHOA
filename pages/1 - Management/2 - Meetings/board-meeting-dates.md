@@ -11,7 +11,9 @@ nav_order: 1
 
 All owners are welcome to visit and observe regular Board Meetings in person or online via **Zoom**.
 
-* **Zoom Information:** Login links are published in the monthly agenda and posted on the website home page at least 48 hours prior to each meeting.
+* **Zoom Information:** 
+  * **Meeting ID:** 870 5442 6175
+  * **Password:** 063245
 * **Homeowner Open Forum:** Homeowners may address the Trustees with comments, concerns, or ideas. Please arrive on time, as the Homeowner’s Open Forum is generally the first item on the agenda. Comments are limited to **2 minutes** per homeowner/unit.
 * **Location:** Meetings are always held in the **Silver Creek Clubhouse** unless otherwise noted.
 * **General Schedule:** 
